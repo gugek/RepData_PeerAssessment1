@@ -5,16 +5,52 @@ output:
     keep_md: true
 ---
 ## Dependencies 
-```{r}
+
+```r
 library(tidyverse)
+```
+
+```
+## ── Attaching packages ─────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.3.0 ──
+```
+
+```
+## ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
+## ✓ tibble  3.0.3     ✓ dplyr   1.0.2
+## ✓ tidyr   1.1.2     ✓ stringr 1.4.0
+## ✓ readr   1.3.1     ✓ forcats 0.5.0
+```
+
+```
+## Warning: package 'readr' was built under R version 3.4.4
+```
+
+```
+## Warning: package 'stringr' was built under R version 3.4.4
+```
+
+```
+## ── Conflicts ────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()
 ```
 ## Loading and preprocessing the data
 - Unzip the activity file if it is there.
 - Load the data file into a data frame called `activity`
 
-```{r}
+
+```r
 unzip("activity.zip")
 activity <- read_csv("activity.csv")
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   steps = col_double(),
+##   date = col_date(format = ""),
+##   interval = col_double()
+## )
 ```
 
 ## What is mean total number of steps taken per day?
@@ -25,7 +61,8 @@ For this part of the assignment, you can ignore the missing values in the datase
 
 ### Histogram of total number of steps taker per day
 
-```{r}
+
+```r
 daily_steps <- activity %>% 
     drop_na() %>%
     select(date, steps) %>% 
@@ -35,8 +72,11 @@ g <- ggplot(daily_steps, aes(date, total_daily_steps))
 g + geom_col()
 ```
 
+![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+
 ### Mean
-```{r}
+
+```r
 daily_steps <- activity %>% 
     drop_na() %>%
     select(date, steps) %>% 
@@ -45,8 +85,13 @@ daily_steps <- activity %>%
 mean_total_steps_per_day <- mean(daily_steps$total_daily_steps, na.rm=TRUE)
 mean_total_steps_per_day
 ```
+
+```
+## [1] 10766.19
+```
 ### Median
-```{r}
+
+```r
 daily_steps <- activity %>% 
     drop_na() %>%
     select(date, steps) %>% 
@@ -56,16 +101,16 @@ median_total_steps_per_day <- median(daily_steps$total_daily_steps, na.rm=TRUE)
 median_total_steps_per_day
 ```
 
+```
+## [1] 10765
+```
+
 ## What is the average daily activity pattern?
 
 1. Make a time series plot (i.e. `type = "l"`) of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
-```{r}
 
-```
 2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
-```{r}
 
-```
 
 ## Imputing missing values
 Note that there are a number of days/intervals where there are missing values (coded as NA). The presence of missing days may introduce bias into some calculations or summaries of the data.
