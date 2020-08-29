@@ -4,18 +4,56 @@ output:
   html_document:
     keep_md: true
 ---
-
-
+## Dependencies 
+```{r}
+library(tidyverse)
+```
 ## Loading and preprocessing the data
+- Unzip the activity file if it is there.
+- Load the data file into a data frame called `activity`
 
+```{r}
+unzip("activity.zip")
+activity <- read_csv("activity.csv")
+```
+## Histogram of total number of steps taker per day
 
+```{r}
+daily_steps <- activity %>% 
+    drop_na() %>%
+    select(date, steps) %>% 
+    group_by(date) %>%
+    summarize(total_daily_steps = sum(steps, na.rm=TRUE), .groups = 'drop')
+g <- ggplot(daily_steps, aes(date, total_daily_steps))
+g + geom_col()
+```
 
 ## What is mean total number of steps taken per day?
-
-
+```{r}
+daily_steps <- activity %>% 
+    drop_na() %>%
+    select(date, steps) %>% 
+    group_by(date) %>%
+    summarize(total_daily_steps = sum(steps, na.rm=TRUE), .groups = 'drop')
+mean_total_steps_per_day <- mean(daily_steps$total_daily_steps, na.rm=TRUE)
+mean_total_steps_per_day
+```
+## What is the median total number of steps taken per day?
+```{r}
+daily_steps <- activity %>% 
+    drop_na() %>%
+    select(date, steps) %>% 
+    group_by(date) %>%
+    summarize(total_daily_steps = sum(steps, na.rm=TRUE), .groups = 'drop')
+median_total_steps_per_day <- median(daily_steps$total_daily_steps, na.rm=TRUE)
+median_total_steps_per_day
+```
 
 ## What is the average daily activity pattern?
 
+```{r}
+
+```
 
 
 ## Imputing missing values
