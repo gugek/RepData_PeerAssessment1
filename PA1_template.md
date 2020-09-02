@@ -52,15 +52,7 @@ activity <- read_csv("activity.csv")
 ##   interval = col_double()
 ## )
 ```
-
-## What is mean total number of steps taken per day?
-For this part of the assignment, you can ignore the missing values in the dataset.
-
-1. Make a histogram of the total number of steps taken each day
-2. Calculate and report the mean and median total number of steps taken per day
-
-### Histogram of total number of steps taker per day
-
+### Total Daily Steps 
 
 ```r
 daily_steps <- activity %>% 
@@ -68,11 +60,58 @@ daily_steps <- activity %>%
     select(date, steps) %>% 
     group_by(date) %>%
     summarize(total_daily_steps = sum(steps, na.rm=TRUE), .groups = 'drop')
-g <- ggplot(daily_steps, aes(date, total_daily_steps))
-g + geom_col()
+head(daily_steps)
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+```
+## # A tibble: 6 x 2
+##   date       total_daily_steps
+##   <date>                 <dbl>
+## 1 2012-10-02               126
+## 2 2012-10-03             11352
+## 3 2012-10-04             12116
+## 4 2012-10-05             13294
+## 5 2012-10-06             15420
+## 6 2012-10-07             11015
+```
+### Mean Steps by Interval
+
+```r
+interval_steps <- activity %>% 
+    drop_na() %>%
+    select(interval, steps) %>% 
+    group_by(interval) %>%
+    summarize(mean_interval_steps = mean(steps, na.rm=TRUE), .groups = 'drop')
+head(interval_steps)
+```
+
+```
+## # A tibble: 6 x 2
+##   interval mean_interval_steps
+##      <dbl>               <dbl>
+## 1        0              1.72  
+## 2        5              0.340 
+## 3       10              0.132 
+## 4       15              0.151 
+## 5       20              0.0755
+## 6       25              2.09
+```
+
+## What is mean total number of steps taken per day?
+For this part of the assignment, you can ignore the missing values in the dataset.
+
+1. Make a histogram of the total number of steps taken each day
+2. Calculate and report the mean and median total number of steps taken per day
+
+### Histogram of total number of steps taken per day
+
+
+```r
+g <- ggplot(daily_steps, aes(total_daily_steps))
+g + geom_histogram(binwidth=2500) + ggtitle("Histogram of Daily Step Data")
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
 
 ### Mean
 
@@ -89,6 +128,8 @@ mean_total_steps_per_day
 ```
 ## [1] 10766.19
 ```
+The mean total number of steps per day in the data set is `10766.19` steps.
+
 ### Median
 
 ```r
@@ -104,13 +145,30 @@ median_total_steps_per_day
 ```
 ## [1] 10765
 ```
+The median total number of steps per day in the data set is `10765.00` steps.
 
 ## What is the average daily activity pattern?
 
 1. Make a time series plot (i.e. `type = "l"`) of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 
+```r
+g <- ggplot(interval_steps, aes(interval, mean_interval_steps))
+g + geom_line()
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
+
 2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
+```r
+max_interval = interval_steps %>% filter(mean_interval_steps == max(interval_steps$mean_interval_steps))
+max_interval$interval
+```
+
+```
+## [1] 835
+```
+The interval with the maximum number of steps is `835`.
 
 ## Imputing missing values
 Note that there are a number of days/intervals where there are missing values (coded as NA). The presence of missing days may introduce bias into some calculations or summaries of the data.
